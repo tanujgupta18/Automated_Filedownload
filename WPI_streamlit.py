@@ -10,7 +10,7 @@ def download_file(url, filename):
         with open(filename, 'wb') as file:
             file.write(response.content)
 
-        st.success(f"File downloaded successfully as {filename}")
+        st.success(f"File Fetched successfully as {filename}")
         return True
 
     except requests.exceptions.RequestException as e:
@@ -23,12 +23,12 @@ def create_download_link(filename, label='Download File'):
     return download_link
 
 def main():
-    st.title("File Downloader App")
+    st.title("WPI File Downloader App")
 
     download_url = 'https://eaindustry.nic.in/indx_download_1112/monthly_index_202311.xls'
     file_name = 'monthly_index_file.xls'
 
-    if st.button("Download File"):
+    if st.button("Fetch File"):
         if download_file(download_url, file_name):
             st.write("File processing completed.")
             
