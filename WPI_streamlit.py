@@ -1,6 +1,7 @@
+import os
 import requests
-import pandas as pd
 import streamlit as st
+import pandas as pd
 
 def download_file(url, filename):
     try:
@@ -10,7 +11,7 @@ def download_file(url, filename):
         with open(filename, 'wb') as file:
             file.write(response.content)
 
-        st.success(f"File processed successfully as {filename}")
+        st.success(f"File Processed successfully as {filename}")
         return True
 
     except requests.exceptions.RequestException as e:
@@ -19,15 +20,10 @@ def download_file(url, filename):
 
 def process_file(filename):
     try:
-        # Read Excel file into a pandas DataFrame
         df = pd.read_excel(filename)
 
-        # Display the first few rows of the DataFrame
-        st.write("First few rows of the DataFrame:")
-        st.write(df.head())
-
-        # Perform additional data processing or analysis as needed
-
+        st.write("First 10 entries of the DataFrame:")
+        st.write(df.head(10))
         return True
 
     except Exception as e:
@@ -37,16 +33,18 @@ def process_file(filename):
 def main():
     st.title("WPI File Downloader App")
 
-    # Hardcoded download URL and file name
     download_url = 'https://eaindustry.nic.in/indx_download_1112/monthly_index_202311.xls'
-    file_name = 'monthly_index_file.xls'
+    file_name = 'monthly-index-file.xls'
 
-    # Download button
     if st.button("Process File"):
         if download_file(download_url, file_name):
             st.write("File processing started.")
             if process_file(file_name):
                 st.success("File processing completed.")
+                
+                file_path = os.path.relpath(file_name)
+                
+                st.markdown(f'<a href="{file_path}" download="{file_name}">Download File - {file_name}</a>', unsafe_allow_html=True)
             else:
                 st.error("Failed to process the file.")
         else:
